@@ -47,7 +47,7 @@ function createTaskCard(task) {
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
-  const savedTasks = JSON.parse(localStorage.getItem("savedTasks")) || [];
+  const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
   // ? Empty existing project cards out of the lanes
   const todoList = $('#todo-cards');
@@ -108,10 +108,10 @@ function handleAddTask(event) {
 
   console.log(data);
 
-  const savedTasks = JSON.parse(localStorage.getItem("savedTasks")) || [];
+  const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
   savedTasks.push(data)
 
-  localStorage.setItem("savedTasks", JSON.stringify(savedTasks))
+  localStorage.setItem("tasks", JSON.stringify(savedTasks))
 
   window.location.reload()
 }
@@ -119,16 +119,19 @@ function handleAddTask(event) {
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event) {
   event.preventDefault();
-
-
-
-
+const taskId= $(this).attr("data-task-id")
+console.log(taskId);
+taskList = taskList.filter(function(task){
+  return task.id !== taskId
+})
+localStorage.setItem("tasks", JSON.stringify(taskList))
+renderTaskList()
 }
 
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
   // ? Read projects from localStorage
-  const savedTasks = JSON.parse(localStorage.getItem("savedTasks")) || [];
+  const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
   // ? Get the project id from the event
   const taskId = ui.draggable[0].dataset.taskId;
@@ -143,7 +146,7 @@ function handleDrop(event, ui) {
     }
   }
   // ? Save the updated projects array to localStorage (overwritting the previous one) and render the new project data to the screen.
-  localStorage.setItem('savedTasks', JSON.stringify(savedTasks));
+  localStorage.setItem('tasks', JSON.stringify(savedTasks));
   renderTaskList()
 }
 
