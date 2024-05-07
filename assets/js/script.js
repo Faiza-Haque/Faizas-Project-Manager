@@ -16,18 +16,18 @@ function createTaskCard(task) {
   const cardHeader = $('<div>').addClass('card-header h4').text(task.title);
   const cardBody = $('<div>').addClass('card-body');
   const cardDescription = $('<p>').addClass('card-text').text(task.description);
-  const cardDueDate = $('<p>').addClass('card-text').text(task.date);
+  const cardDueDate = $('<p>').addClass('card-text').text(task.dueDate);
   const cardDeleteBtn = $('<button>')
     .addClass('btn btn-danger delete')
     .text('Delete')
     .attr('data-task-id', task.id);
   cardDeleteBtn.on('click', handleDeleteTask);
-
+  console.log(task)
   // ? Sets the card background color based on due date. Only apply the styles if the dueDate exists and the status is not done.
   if (task.dueDate && task.status !== 'done') {
     const now = dayjs();
     const taskDueDate = dayjs(task.dueDate, 'DD/MM/YYYY');
-
+    console.log(task, taskDueDate)
     //   // ? If the task is due today, make the card yellow. If it is overdue, make it red.
     if (now.isSame(taskDueDate, 'day')) {
       taskCard.addClass('bg-warning text-white');
@@ -102,7 +102,7 @@ function handleAddTask(event) {
     id: self.crypto.randomUUID(),
     title: title,
     description: description,
-    date: datepicker,
+    dueDate: datepicker,
     status: "to-do"
   };
 
@@ -119,13 +119,13 @@ function handleAddTask(event) {
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event) {
   event.preventDefault();
-const taskId= $(this).attr("data-task-id")
-console.log(taskId);
-taskList = taskList.filter(function(task){
-  return task.id !== taskId
-})
-localStorage.setItem("tasks", JSON.stringify(taskList))
-renderTaskList()
+  const taskId = $(this).attr("data-task-id")
+  console.log(taskId);
+  taskList = taskList.filter(function (task) {
+    return task.id !== taskId
+  })
+  localStorage.setItem("tasks", JSON.stringify(taskList))
+  renderTaskList()
 }
 
 // Todo: create a function to handle dropping a task into a new status lane
